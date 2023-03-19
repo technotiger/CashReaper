@@ -9,7 +9,7 @@ fi
 if [[ "$USE_PACKET_STREAM" != "n" ]]
 
 then
-    echo Starting Service
+    echo Starting PacketStream Service
     while true;
     do 
         PID=$(ps -aux | grep exit-node | grep -v grep | awk '{print $2}')
@@ -36,9 +36,9 @@ then
             sleep 10
         fi
     done
-    echo Service crashed restarting
+    echo PacketStream service crashed, restarting
 else
-    echo Not running service sleeping...
+    echo Not running packetstream service, sleeping...
     sleep 360 #TODO: make this better, maybe make s6 just not launch it goodnuff for now
 fi
 sleep 60
