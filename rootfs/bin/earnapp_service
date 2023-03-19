@@ -8,7 +8,7 @@ fi
 (
 if [[ "$USE_EARNAPP" != "n" ]]
 then
-    echo Starting Service
+    echo Starting Earnapp Service
     if [ ! -f /usr/bin/earnapp ]
     then
         curl -L https://brightdata.com/static/earnapp/install.sh > /tmp/earnapp.sh && bash /tmp/earnapp.sh -y
@@ -19,9 +19,9 @@ then
         /usr/bin/earnapp start
         /usr/bin/earnapp run 2>&1 
     fi
-    echo Service crashed, restarting
+    echo Earnapp service crashed, restarting
 else
-    echo Not running service sleeping...
+    echo Not running earnapp service sleeping...
     sleep 360
 fi
 
