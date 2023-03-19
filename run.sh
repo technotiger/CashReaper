@@ -9,7 +9,7 @@ else
     exit 1
 fi
 
-docker run -d --restart always --env-file ${SCRIPT_DIR}/settings.conf --name picash chashtag/picash
+docker run -d --restart unless-stopped --mount source=vol-picash,target=/etc/earnapp --env-file ${SCRIPT_DIR}/settings.conf --name picash technotiger/picash
 
 if [[ "$USE_EARNAPP" == "y" ]]
 then
