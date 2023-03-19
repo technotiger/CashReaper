@@ -15,22 +15,22 @@ then
             echo ERROR: One or more bitping settings are blank
             exit 1
         fi
-        echo Starting Service
+        echo Starting Bitping Service
         if [[ `uname -m` == "x86_64" ]]
         then
-            echo Running x86
+            echo Running x86 bitping node
             /opt/bitping/release/bitping-node-amd64-linux --server --email $BP_EMAIL -password $BP_PASSWORD 2>&1
-        elif [[ `uname -m` == "armv7l" ]] || [[ `uname -m` == "aarch64" ]] 
+        elif [[ `uname -m` == "armv7l" ]]
         then
-            echo Running `uname -m`
+            echo Running `uname -m` bitping node
             /opt/bitping/release/bitping-node-armv7-linux --server --email $BP_EMAIL -password $BP_PASSWORD 2>&1
         else
-            echo Running default `uname -m`
+            echo Running default bitping node
             /usr/bin/qemu-x86_64 /opt/bitping/release/bitping-node-amd64-linux --server --email $BP_EMAIL -password $BP_PASSWORD 2>&1
         fi
-        echo Service crashed, restarting
+        echo Bitping service crashed, restarting
     else
-        echo Not running service sleeping...
+        echo Not running bitping service, sleeping...
         sleep 360
     fi
 else
