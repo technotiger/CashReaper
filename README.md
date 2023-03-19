@@ -54,6 +54,11 @@ git clone https://github.com/technotiger/PiCash.git && cd PiCash
 
 Edit the `settings.conf` file
 
+Build docker image
+```
+docker build . -t technotiger/picash
+```
+
 Build and run the container via `./run.sh`
 <br>
 <br>
