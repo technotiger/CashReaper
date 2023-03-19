@@ -9,16 +9,16 @@ DEF_ROUTE_IFACE=$(ip route get 1.1.1.1 | grep -Po "src\s(\K.+?)\s" |xargs)
 (
 if [[ "$USE_PEER2PROFIT" != "n" ]]
 then
-    echo Service enabled, starting
+    echo Peer2Profit Service Starting
     if [[ `uname -m` != "aarch64" ]]
     then
         /usr/bin/qemu-aarch64 -L /usr/aarch64-linux-gnu/ /usr/bin/p2pclient -l ${P2_EMAIL}  $(if [[ ! -z "${DNS}" ]]; then echo -ne "  \b-n $DEF_ROUTE_IFACE;$DNS"; fi)
     else
         /usr/bin/p2pclient -l ${P2_EMAIL}  $(if [[ ! -z "${DNS}" ]]; then echo -ne " \b -n $DEF_ROUTE_IFACE;$DNS"; fi)
     fi
-    echo Service crashed restarting
+    echo Peer2Profit service crashed, restarting
 else
-    echo Not running service sleeping...
+    echo Not running peer2profit service, sleeping...
     sleep 360 
 fi
 sleep 60
