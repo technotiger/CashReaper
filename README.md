@@ -17,13 +17,13 @@ Raspberry Pi's running 64 bit OS's are supported (4, Zero2 W, 3b+) aarch64
 
 
 You will need an account at each of these sites
-- [Register Earnapp](https://earnapp.com/i/p9c6p7r)
-- [Register Honeygain](https://r.honeygain.me/MATTH77B97)
-- [Register Peer2profit](https://p2pr.me/16630967886320d7d435020)
-- [Register Pawns.app(Formerly IPRoyal Pawns)](https://pawns.app?r=538917)
-- [Register Packetstream](https://packetstream.io/?psr=3dq9)
-- [Register Traffmonetizer](https://traffmonetizer.com/?aff=522583)
-- [Register BitPing](https://app.bitping.com?r=3TGus9GO) *Crypto payout
+- [Register Earnapp](https://earnapp.com/i/48Bwwfmz)
+- [Register Honeygain](https://r.honeygain.me/TECHTA09A1)
+- [Register Peer2profit](https://p2pr.me/167879798664106ca232fd5)
+- [Register Pawns.app(Formerly IPRoyal Pawns)](https://pawns.app?r=1358509)
+- [Register Packetstream](https://packetstream.io/?psr=56yi)
+- [Register Traffmonetizer](https://traffmonetizer.com/?aff=1160018)
+- [Register BitPing](https://app.bitping.com?r=j5mXMC7t)
 
 
 **These are affiliate links, please use them to support development
@@ -49,7 +49,7 @@ Docker is required (maybe when fedora 37 lands we can look at using podman)
 git clone onto a arm64 platform
 
 ```
-git clone https://github.com/chashtag/PiCash.git && cd PiCash
+git clone https://github.com/technotiger/PiCash.git && cd PiCash
 ```
 
 Edit the `settings.conf` file
