@@ -110,7 +110,6 @@ HG_PASSWORD=MyP@$$W0rd
 # Packet Stream
 Register for an account. In the settings file set `USE_PACKET_STREAM` to `y` and `PS_ID` to your CID. You can find your CID by navigating to the [Download page](https://packetstream.io/dashboard/download) and scrolling the bottom where it give you "Linux" instructions. Inside that blob of text you will find your CID, below is a picture of where it can be found.
 
-![cid](https://github.com/chashtag/PiCash/blob/images/images/packetstream.png?raw=true)
 <br><br>Example
 ```
 # Packet Stream
@@ -173,7 +172,7 @@ BP_PASSWORD=MyP@$$W0rd
 
 
 # Other stuff
-EarnApp should be the only one requiring persistent storage, adding a mount point to `<local_path>/earnapp/:/etc/earnapp/` will make it so you do not have to keep registering the host.
+EarnApp requires persistent storage. Docker volume vol-picash is created and used for this purpose.
 <br>
 <br>
 All logs should be going to /var/log/picash/
