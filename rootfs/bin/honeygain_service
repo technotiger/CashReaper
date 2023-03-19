@@ -8,7 +8,7 @@ fi
 (
 if [[ "$USE_HONEYGAIN" != "n" ]]
 then
-    echo Starting Service
+    echo Starting Honeygain Service
     if [[ -z "$HG_EMAIL" || -z "$HG_PASSWORD" ]]; then
         echo ERROR: One or more honeygain settings are blank
         exit 1
@@ -19,9 +19,9 @@ then
     else
        LD_PRELOAD=/opt/honeygain/libhg.so.1.0.0 /opt/honeygain/honeygain -tou-accept -email $HG_EMAIL -pass $HG_PASSWORD -device `hostname` 2>&1
     fi
-    echo Service crashed restarting
+    echo Honeygain service crashed, restarting
 else
-    echo Not running service sleeping...
+    echo Not running honeygain service, sleeping...
     sleep 60 
 fi
 sleep 360
