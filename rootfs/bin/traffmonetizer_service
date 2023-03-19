@@ -9,7 +9,7 @@ cd /opt/traffmonetizer/
 (
 if [[ "$USE_TRAFFMONETIZER" != "n" ]]
 then
-    echo Starting Service
+    echo Starting Traffmonetizer Service
     if [ -z $TRAFF_TOKEN ]
     then
         echo TRAFF_TOKEN Not set
@@ -26,9 +26,9 @@ then
         /usr/bin/qemu-aarch64 -L /usr/aarch64-linux-gnu/ /opt/traffmonetizer/Cli start accept --token $TRAFF_TOKEN 2>&1
     fi
 
-    echo Service crashed, restarting
+    echo Traffmonetizer service crashed, restarting
 else
-    echo Not running service sleeping...
+    echo Not running traffmonetizer service, sleeping...
     sleep 360
 fi
 sleep 60
