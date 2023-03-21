@@ -1,11 +1,10 @@
 #!/bin/bash
-LOGLOC=/var/log/picash/earnapp
+
 if [[ ! -z $STAGGER ]]
 then
     sleep $[ ( $RANDOM % 30 )  + 1 ]s
 fi
 
-(
 if [[ "$USE_EARNAPP" != "n" ]]
 then
     echo Starting Earnapp Service
@@ -26,4 +25,3 @@ else
 fi
 
 sleep 60
-) | rotatelogs -fDen 5 $LOGLOC 100M
