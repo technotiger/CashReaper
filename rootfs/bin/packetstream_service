@@ -1,11 +1,10 @@
 #!/bin/bash
-LOGLOC=/var/log/picash/packetstream
+
 if [[ ! -z $STAGGER ]]
 then
     sleep $[ ( $RANDOM % 30 )  + 1 ]s
 fi
 
-(
 if [[ "$USE_PACKET_STREAM" != "n" ]]
 
 then
@@ -42,4 +41,3 @@ else
     sleep 360 #TODO: make this better, maybe make s6 just not launch it goodnuff for now
 fi
 sleep 60
-) | rotatelogs -fDen 5 $LOGLOC 100M
