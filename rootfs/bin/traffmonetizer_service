@@ -1,12 +1,12 @@
 #!/bin/bash
-LOGLOC=/var/log/picash/traffmonetizer
+
 if [[ ! -z $STAGGER ]]
 then
     sleep $[ ( $RANDOM % 30 )  + 1 ]s
 fi
 
 cd /opt/traffmonetizer/
-(
+
 if [[ "$USE_TRAFFMONETIZER" != "n" ]]
 then
     echo Starting Traffmonetizer Service
@@ -32,4 +32,3 @@ else
     sleep 360
 fi
 sleep 60
-) | rotatelogs -fDen 5 $LOGLOC 100M
