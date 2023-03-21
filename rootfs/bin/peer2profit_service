@@ -1,12 +1,11 @@
 #!/bin/bash
-LOGLOC=/var/log/picash/peer2profit
+
 if [[ ! -z $STAGGER ]]
 then
     sleep $[ ( $RANDOM % 30 )  + 1 ]s
 fi
 DEF_ROUTE_IFACE=$(ip route get 1.1.1.1 | grep -Po "src\s(\K.+?)\s" |xargs)
 
-(
 if [[ "$USE_PEER2PROFIT" != "n" ]]
 then
     echo Peer2Profit Service Starting
@@ -22,4 +21,3 @@ else
     sleep 360 
 fi
 sleep 60
-) | rotatelogs -fDen 5 $LOGLOC 100M
