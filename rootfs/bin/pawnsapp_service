@@ -1,12 +1,11 @@
 #!/bin/bash
-LOGLOC=/var/log/picash/pawns
+
 HOSTNAME=`hostname`
 if [[ ! -z $STAGGER ]]
 then
     sleep $[ ( $RANDOM % 30 )  + 1 ]s
 fi
 
-(
 if [[ "$USE_PAWNSAPP" != "n" ]]
 then
     echo Starting Pawnsapp Service
@@ -22,4 +21,3 @@ else
     sleep 360
 fi
 sleep 60
-) | rotatelogs -fDen 5 $LOGLOC 100M
