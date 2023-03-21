@@ -1,12 +1,10 @@
 #!/bin/bash
-LOGLOC=/var/log/picash/bitping
 
 if [[ ! -z $STAGGER ]]
 then
     sleep $[ ( $RANDOM % 30 )  + 1 ]s
 fi
 
-(
 if ! ps aux | grep -q "[b]itping-node"
 then
     if [[ "$USE_BITPING" != "n" ]]
@@ -37,5 +35,3 @@ else
     
     sleep 60 
 fi
-
-) | rotatelogs -fDen 5 $LOGLOC 100M
