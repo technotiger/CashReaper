@@ -1,0 +1,26 @@
+#!/bin/bash
+
+if [[ ! -z $STAGGER ]]
+then
+    sleep $[ ( $RANDOM % 30 )  + 15 ]s
+fi
+
+echo Starting Earnapp Log2Ram service
+sleep 120
+
+while true;
+do
+    if [[ ! -L "/etc/earnapp/brd_sdk3.log" ]]
+    then
+        # move log file to ram and create symlink
+        earnapp stop
+        fuser -k /etc/earnapp/brd_sdk3.log
+        mv /etc/earnapp/brd_sdk3.log /tmp/brd_sdk3.log
+        ln -s /tmp/brd_sdk3.log /etc/earnapp/brd_sdk3.log
+    fi
+    sleep 300
+done
+
+echo Earnapp log2ram service crashed, restarting
+
+sleep 60

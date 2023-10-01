@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if [[ ! -z $STAGGER ]]
+then
+    sleep $[ ( $RANDOM % 30 )  + 15 ]s
+fi
+
+echo Starting Honeygain Auto-Claim service
+sleep 120
+
+if [[ -z "$HG_EMAIL" || -z "$HG_PASSWORD" ]]; then
+    echo ERROR: Honeygain EMAIL/PASSWORD not set
+    exit 1
+fi
+
+while true;
+do
+    # run auto claim every 6 hours
+    cd /opt/hg-autoclaim
+    python3 main.py
+    echo Honeygain Auto-Claim will run again in 6 hours
+    sleep 21600
+done
+
+sleep 60

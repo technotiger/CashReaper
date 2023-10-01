@@ -1,0 +1,3 @@
+#!/command/with-contenv bash
+exec /bin/traffmonetizer_service 
+sleep 5

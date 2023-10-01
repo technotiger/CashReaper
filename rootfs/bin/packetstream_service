@@ -1,0 +1,44 @@
+#!/bin/bash
+
+if [[ ! -z $STAGGER ]]
+then
+    sleep $[ ( $RANDOM % 30 )  + 1 ]s
+fi
+
+echo Starting PacketStream Service
+
+if [ -z $PS_ID ]
+then
+    echo Error: Packetstream PS_ID not set
+    exit 1
+fi
+
+export CID=$PS_ID
+export PS_IS_DOCKER=true
+/usr/local/bin/pslauncher
+sleep 120
+
+while true;
+do
+    PID=$(ps -aux | grep psclient | grep -v grep | awk '{print $2}')
+    if [ -z "$PID" ]
+    then
+        echo PacketStream service crashed, restarting
+        /usr/local/bin/pslauncher
+        sleep 60
+    else
+        LC=$(netstat -punta | grep $PID | wc -l)
+        if [[ $LC -le 1 ]];
+        then
+            echo $PID , $LC exiting
+            kill -9 $PID
+            /usr/local/bin/pslauncher
+            sleep 60
+        else
+            #echo $PID , $LC not exiting
+            sleep 600
+        fi
+    fi
+done
+
+sleep 60

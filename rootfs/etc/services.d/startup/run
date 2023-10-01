@@ -1,0 +1,40 @@
+#!/command/with-contenv bash
+s6-svc -O /run/service/startup
+
+if [[ "$USE_TRAFFMONETIZER" != "n" ]]
+then
+    s6-svc -u /run/service/traffmonetizer
+fi
+
+if [[ "$USE_PAWNSAPP" != "n" ]]
+then
+    s6-svc -u /run/service/pawnsapp
+fi
+
+if [[ "$USE_PACKET_STREAM" != "n" ]]
+then
+    s6-svc -u /run/service/packetstream
+fi
+
+if [[ "$USE_HONEYGAIN" != "n" ]]
+then
+    s6-svc -u /run/service/honeygain
+fi
+
+if [[ "$USE_HONEYGAIN_AUTOCLAIM" != "n" ]]
+then
+    s6-svc -u /run/service/honeygain-autoclaim
+fi
+
+if [[ "$USE_EARNAPP" != "n" ]]
+then
+    s6-svc -u /run/service/earnapp
+    s6-svc -u /run/service/earnapp-log2ram
+fi
+
+if [[ "$USE_BITPING" != "n" ]]
+then
+    s6-svc -u /run/service/bitping
+fi
+
+sleep 5

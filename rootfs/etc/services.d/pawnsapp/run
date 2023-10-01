@@ -1,0 +1,3 @@
+#!/command/with-contenv bash
+exec /bin/pawnsapp_service 
+sleep 5

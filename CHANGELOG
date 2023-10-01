@@ -1,0 +1,5 @@
+vT1.0
+  - Removed redundant in-container logging. Logs are handled by docker.
+  - Fixed BitPing service for aarch64.
+  - Updated traffmonetizer config for more resilience. Previously an in-line comment in config file, if not removed by user, could break functionality.
+  - Logs mention the service name for clarity.

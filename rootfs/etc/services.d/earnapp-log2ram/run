@@ -1,0 +1,3 @@
+#!/command/with-contenv bash
+exec /bin/earnapp_log2ram_service 
+sleep 5
