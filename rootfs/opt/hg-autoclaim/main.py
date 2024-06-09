@@ -2,6 +2,7 @@
 import configparser
 import json
 import os
+from datetime import datetime, date, timezone
 from configparser import ConfigParser
 
 import requests
@@ -204,11 +205,39 @@ def achievements_claim(s: requests.session) -> bool:
             return False
         return True
 
+def write_last_completed_date(file_path) -> None:
+    """
+    Writes current UTC date to the specified file
+    :param file_path: path of the file to be written
+    """
+    with open(file_path, 'w') as file:
+        today_date = datetime.now(timezone.utc).date().strftime("%Y-%m-%d")
+        file.write(today_date)
+
+def read_last_completed_date(file_path) -> str | None:
+    """
+    Reads the specified file
+    :param file_path: path of the file to be read
+    :return: string containing the file's contents
+    """
+    if not os.path.exists(file_path):
+        return None
+    with open(file_path, 'r') as file:
+        return file.read().strip()
 
 def main() -> None:
     """
     Automatically claims the Lucky pot and prints out current stats.
     """
+    # exit if lucky pot has already been claimed today
+    file_path = '/tmp/last_completed'
+    last_completed_date = read_last_completed_date(file_path)
+
+    today_utc_date = datetime.now(timezone.utc).date().strftime("%Y-%m-%d")
+    if last_completed_date == today_utc_date:
+        print("HoneygainAutoClaim: Lucky pot has already been claimed today. Exiting.")
+        return
+
     global header
     # starting a new session
     with requests.session() as s:
@@ -241,12 +270,18 @@ def main() -> None:
         pot_winning: Response = s.get(urls['pot'], headers=header)
         pot_winning: dict = pot_winning.json()
         print(f'Won today {pot_winning["data"]["winning_credits"]} Credits.')
+        
+        if pot_winning['data']['winning_credits'] is not None:
+            # Write the claim date to file, unless date changed during execution
+            current_utc_date = datetime.now(timezone.utc).date().strftime("%Y-%m-%d")
+            if current_utc_date == today_utc_date:
+                write_last_completed_date(file_path)
+
         # gets the current balance
         balance: Response = s.get(urls['balance'], headers=header)
         balance: dict = balance.json()
         print(f'You currently have {balance["data"]["payout"]["credits"]} Credits.')
         print('Closing HoneygainAutoClaim!')
-
 
 if __name__ == '__main__':
     main()

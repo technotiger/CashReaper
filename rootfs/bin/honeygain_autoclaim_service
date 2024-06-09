@@ -13,13 +13,25 @@ if [[ -z "$HG_EMAIL" || -z "$HG_PASSWORD" ]]; then
     exit 1
 fi
 
+interval=10800
+if [[ ! -z "$HG_AUTOCLAIM_INTERVAL" ]]; then
+    if [[ $HG_AUTOCLAIM_INTERVAL -lt 600 ]]; then 
+        interval=600;
+    elif [[ $HG_AUTOCLAIM_INTERVAL -gt 86400 ]]; then
+        interval=86400;
+    else
+        interval=$HG_AUTOCLAIM_INTERVAL
+    fi
+fi
+
 while true;
 do
-    # run auto claim every 6 hours
+    # run auto claim
     cd /opt/hg-autoclaim
     python3 main.py
-    echo Honeygain Auto-Claim will run again in 6 hours
-    sleep 21600
+    echo Honeygain Auto-Claim will run again after $interval seconds.
+    sleep $interval
+    sleep $[ ( $RANDOM % 300 ) ]s
 done
 
 sleep 60

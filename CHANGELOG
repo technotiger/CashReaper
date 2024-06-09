@@ -1,5 +1,12 @@
-vT1.0
+v1.0
   - Removed redundant in-container logging. Logs are handled by docker.
   - Fixed BitPing service for aarch64.
   - Updated traffmonetizer config for more resilience. Previously an in-line comment in config file, if not removed by user, could break functionality.
   - Logs mention the service name for clarity.
+
+v1.1
+  - Updated applications and system.
+  - Enhanced monitoring for all services to ensure they stay active.
+  - Implemented minor bug fixes, refined codebase, and optimized performance.
+  - The Honeygain Auto-Claim interval can now be adjusted via optional environment variable.
+  - Updated run.sh seamlessly builds the image, cleans up the system, and starts a container with optimal settings.

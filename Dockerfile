@@ -1,7 +1,7 @@
-FROM python:3.11-slim-bullseye
+FROM python:slim-bullseye
 
 ARG BUILDPLATFORM BUILDOS BUILDARCH BUILDVARIANT TARGETPLATFORM TARGETOS TARGETARCH TARGETVARIANT 
-ARG S6_OVERLAY_VERSION=v3.1.5.0
+ARG S6_OVERLAY_VERSION=v3.1.6.2
 ARG DEBIAN_FRONTEND='noninteractive'
 
 RUN apt-get update && \
@@ -10,9 +10,6 @@ RUN apt-get update && \
        apt-file \
        apt-transport-https \
        apt-utils \
-       bash \
-       ca-certificates \
-       coreutils \
        curl \
        iproute2 \
        libc6-arm64-cross \
@@ -33,21 +30,18 @@ RUN apt-get update && \
 RUN curl --fail https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz -SLo- | tar -C / -Jxpf - && \
     curl --fail https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-`uname -m| sed 's/armv7l/armhf/g'`.tar.xz -SLo- | tar -C / -Jxpf -
 
-
 COPY rootfs/ /
 
-
 COPY --from=packetstream/psclient:latest /usr/local/bin/ /usr/local/bin/
-
+COPY --from=honeygain/honeygain:latest /usr/lib/ /usr/lib/
+COPY --from=honeygain/honeygain:latest /app/ /opt/honeygain/
 
 RUN /installer/main.sh
 
-
-RUN useradd -ms /bin/bash picash
-
+RUN useradd -ms /bin/bash cashreaper
 
 WORKDIR /opt/hg-autoclaim
-RUN pip install --no-cache-dir requests
+RUN pip install --upgrade pip --no-cache-dir requests
 WORKDIR /root
 
 ENTRYPOINT [ "/init" ]

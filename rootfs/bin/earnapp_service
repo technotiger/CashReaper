@@ -7,18 +7,32 @@ fi
 
 echo Starting Earnapp Service
 
-if [ ! -f /usr/bin/earnapp ]
-then
-    curl -L https://brightdata.com/static/earnapp/install.sh > /tmp/earnapp.sh && bash /tmp/earnapp.sh -y
-    rm /tmp/earnapp.sh
-    earnapp stop
-    /usr/bin/earnapp start
-    /usr/bin/earnapp run 2>&1 
-else
-    /usr/bin/earnapp start
-    /usr/bin/earnapp run 2>&1 
-fi
+/usr/bin/earnapp start
+/usr/bin/earnapp run 2>&1 &
 
-echo Earnapp service crashed, restarting
+while true;
+do
+    sleep 300
+    PID=$(ps -aux | grep /usr/bin/earnapp | grep -v grep | awk '{print $2}')
+    if [ -z "$PID" ]
+    then
+        echo Earnapp service crashed, restarting
+        /usr/bin/earnapp start
+        /usr/bin/earnapp run 2>&1 &
+    else
+        LC=$(netstat -punta | grep $PID | wc -l)
+        echo Earnapp running. Connections: $LC
+        if [[ $LC -le 0 ]];
+        then
+            echo Restarting Earnapp Service. PID: $PID, LC: $LC
+            kill -9 $PID
+            sleep 180
+            /usr/bin/earnapp start
+            /usr/bin/earnapp run 2>&1 &
+        else
+            sleep 300
+        fi
+    fi
+done
 
 sleep 60

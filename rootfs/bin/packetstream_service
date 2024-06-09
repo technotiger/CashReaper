@@ -15,28 +15,27 @@ fi
 
 export CID=$PS_ID
 export PS_IS_DOCKER=true
-/usr/local/bin/pslauncher
-sleep 120
+/opt/packetstream/pslauncher &
 
 while true;
 do
+    sleep 300
     PID=$(ps -aux | grep psclient | grep -v grep | awk '{print $2}')
     if [ -z "$PID" ]
     then
         echo PacketStream service crashed, restarting
-        /usr/local/bin/pslauncher
-        sleep 60
+        /opt/packetstream/pslauncher &
     else
         LC=$(netstat -punta | grep $PID | wc -l)
-        if [[ $LC -le 1 ]];
+        echo PacketStream running. Connections: $LC
+        if [[ $LC -le 0 ]];
         then
-            echo $PID , $LC exiting
+            echo Restarting PacketStream Service. PID: $PID, LC: $LC
             kill -9 $PID
-            /usr/local/bin/pslauncher
-            sleep 60
+            sleep 180
+            /opt/packetstream/pslauncher &
         else
-            #echo $PID , $LC not exiting
-            sleep 600
+            sleep 300
         fi
     fi
 done

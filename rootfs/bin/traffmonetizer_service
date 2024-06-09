@@ -15,13 +15,38 @@ then
     exit 1
 fi
 
-if [[ `uname -m` =~ ^(aarch64|armv7l)$ ]]
-then
-    /opt/traffmonetizer/Cli start accept --token $TRAFF_TOKEN 2>&1
-else
-    /usr/bin/qemu-aarch64 -L /usr/aarch64-linux-gnu/ /opt/traffmonetizer/Cli start accept --token $TRAFF_TOKEN 2>&1
-fi
+start_traffmonetizer_cli () {
+    if [[ `uname -m` =~ ^(aarch64|armv7l)$ ]]
+    then
+        /opt/traffmonetizer/Cli start accept --token $TRAFF_TOKEN 1> /dev/null &
+    else
+        /usr/bin/qemu-aarch64 -L /usr/aarch64-linux-gnu/ /opt/traffmonetizer/Cli start accept --token $TRAFF_TOKEN 1> /dev/null &
+    fi
+}
 
-echo Traffmonetizer service crashed, restarting
+start_traffmonetizer_cli
+
+while true;
+do
+    sleep 300
+    PID=$(ps -aux | grep Cli | grep -v grep | awk '{print $2}')
+    if [ -z "$PID" ]
+    then
+        echo Traffmonetizer service crashed, restarting
+        start_traffmonetizer_cli
+    else
+        LC=$(netstat -punta | grep $PID | wc -l)
+        echo Traffmonetizer running. Connections: $LC
+        if [[ $LC -le 1 ]];
+        then
+            echo Restarting Traffmonetizer Service. PID: $PID, LC: $LC
+            kill -9 $PID
+            sleep 180
+            start_traffmonetizer_cli
+        else
+            sleep 300
+        fi
+    fi
+done
 
 sleep 60

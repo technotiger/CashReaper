@@ -12,12 +12,29 @@ if [[ -z "$HG_EMAIL" || -z "$HG_PASSWORD" ]]; then
     exit 1
 fi
 
-if [[ `uname -m` != "x86_64" ]]
-then
-    /usr/bin/qemu-x86_64 -E LD_PRELOAD=/opt/honeygain/libhg.so.1.0.0 /opt/honeygain/honeygain -tou-accept -email $HG_EMAIL -pass $HG_PASSWORD -device `hostname` 2>&1 
-else
-    LD_PRELOAD=/opt/honeygain/libhg.so.1.0.0 /opt/honeygain/honeygain -tou-accept -email $HG_EMAIL -pass $HG_PASSWORD -device `hostname` 2>&1
-fi
-echo Honeygain service crashed, restarting
+/opt/honeygain/honeygain -tou-accept -email $HG_EMAIL -pass $HG_PASSWORD -device `hostname` 2>&1 &
+
+while true;
+do
+    sleep 300
+    PID=$(ps -aux | grep opt/honeygain | grep -v grep | awk '{print $2}')
+    if [ -z "$PID" ]
+    then
+        echo Honeygain service crashed, restarting
+        /opt/honeygain/honeygain -tou-accept -email $HG_EMAIL -pass $HG_PASSWORD -device `hostname` 2>&1 &
+    else
+        LC=$(netstat -punta | grep $PID | wc -l)
+        echo Honeygain running. Connections: $LC
+        if [[ $LC -le 0 ]];
+        then
+            echo Restarting Honeygain Service. PID: $PID, LC: $LC
+            kill -9 $PID
+            sleep 630
+            /opt/honeygain/honeygain -tou-accept -email $HG_EMAIL -pass $HG_PASSWORD -device `hostname` 2>&1 &
+        else
+            sleep 300
+        fi
+    fi
+done
 
 sleep 60

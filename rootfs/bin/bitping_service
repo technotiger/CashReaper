@@ -5,29 +5,37 @@ then
     sleep $[ ( $RANDOM % 30 )  + 1 ]s
 fi
 
-if ! ps aux | grep -q "[b]itping-node"
-then
-    echo Starting Bitping Service
+echo Starting Bitping Service
 
-    if [[ -z "$BP_EMAIL" || -z "$BP_PASSWORD" ]]; then
-        echo ERROR: Bitping EMAIL/PASSWORD not set
-        exit 1
-    fi
-
-    if [[ `uname -m` == "x86_64" ]]
-    then
-        echo Running x86 bitping node
-        /opt/bitping/release/bitping-node-amd64-linux --server --email $BP_EMAIL -password $BP_PASSWORD 2>&1
-    elif [[ `uname -m` == "armv7l" ]]
-    then
-        echo Running `uname -m` bitping node
-        /opt/bitping/release/bitping-node-armv7-linux --server --email $BP_EMAIL -password $BP_PASSWORD 2>&1
-    else
-        echo Running default bitping node
-        /usr/bin/qemu-x86_64 /opt/bitping/release/bitping-node-amd64-linux --server --email $BP_EMAIL -password $BP_PASSWORD 2>&1
-    fi
-    
-    echo Bitping service crashed, restarting
+if [[ -z "$BP_EMAIL" || -z "$BP_PASSWORD" ]]; then
+    echo ERROR: Bitping EMAIL/PASSWORD not set
+    exit 1
 fi
 
-sleep 60 
+/opt/bitpingd login --email $BP_EMAIL --password $BP_PASSWORD 2>&1
+/opt/bitpingd run 1> /dev/null &
+
+while true;
+do
+    sleep 300
+    PID=$(ps -aux | grep bitpingd | grep -v grep | awk '{print $2}')
+    if [ -z "$PID" ]
+    then
+        echo Bitping service crashed, restarting
+        /opt/bitpingd run 1> /dev/null &
+    else
+        LC=$(netstat -punta | grep $PID | wc -l)
+        echo Bitping running. Connections: $LC
+        if [[ $LC -le 1 ]];
+        then
+            echo Restarting Bitping Service. PID: $PID, LC: $LC
+            kill -9 $PID
+            sleep 180
+            /opt/bitpingd run 1> /dev/null &
+        else
+            sleep 300
+        fi
+    fi
+done
+
+sleep 60
